@@ -12,16 +12,22 @@ const Home = () => {
   const [сategoryId, setCategoryId] = useState(0);
 
   const [selected, setSelected] = useState(false);
-  const [activeSort, setActiveSort] = useState(0);
+  const [activeSort, setActiveSort] = useState({
+    name: "популярности",
+    sortProperty: "rating",
+  });
 
   console.log(сategoryId, activeSort);
+
+  const category = сategoryId > 0 ? `category=${сategoryId}` : "";
+  const sortBy = activeSort.sortProperty;
+  const order = ""; // под вопросом
 
   useEffect(() => {
     setIsLoading(true);
 
     fetch(
-      `https://813cecfc1deed960.mokky.dev/items?sortBy=${activeSort}&category=` +
-        сategoryId
+      `https://813cecfc1deed960.mokky.dev/items?${category}&sortBy=${sortBy}`
     )
       .then((res) => res.json())
       .then((items) => {
