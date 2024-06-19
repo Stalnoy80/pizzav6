@@ -5,7 +5,7 @@ import Sort from "../components/Sort";
 import Pizzablock from "../components/Pizzablock";
 import Skeleton from "../components/Skeleton";
 
-const Home = () => {
+const Home = ({ searchValue }) => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,18 +17,16 @@ const Home = () => {
     sortProperty: "rating",
   });
 
-  console.log(сategoryId, activeSort);
-
   const category = сategoryId > 0 ? `category=${сategoryId}` : "";
   const sortBy = activeSort.sortProperty;
   const order = ""; // под вопросом
 
+  console.log(searchValue);
+
   useEffect(() => {
     setIsLoading(true);
 
-    fetch(
-      `https://813cecfc1deed960.mokky.dev/items?${category}&sortBy=${sortBy}`
-    )
+    fetch(`https://813cecfc1deed960.mokky.dev/items?title=*${searchValue}`)
       .then((res) => res.json())
       .then((items) => {
         setItems(items);

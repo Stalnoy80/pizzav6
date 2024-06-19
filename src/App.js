@@ -2,13 +2,15 @@ import React from "react";
 import "./scss/app.scss";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import { useState } from "react";
 
 function App() {
+  const [searchValue, setSearchValue] = useState("");
   return (
     <div className="wrapper">
-      <Header />
+      <Header searchValue={searchValue} setSearchValue={setSearchValue} />
       <div className="container">
-        <Home />
+        <Home searchValue={searchValue} />
       </div>
     </div>
   );
