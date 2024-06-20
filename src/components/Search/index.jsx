@@ -1,6 +1,10 @@
 import React from "react";
 import styles from "./Search.module.scss";
-const Search = ({ searchValue, setSearchValue }) => {
+import { useContext } from "react";
+import { SearchContext } from "../../App";
+const Search = () => {
+  const { searchValue, setSearchValue } = useContext(SearchContext);
+  console.log(searchValue);
   return (
     <div className={styles.root}>
       <svg
@@ -44,12 +48,12 @@ const Search = ({ searchValue, setSearchValue }) => {
         type="text"
         className={styles.input}
         placeholder="Поиск..."
-        value={searchValue}
+        value={searchValue} //контролируемый инпут
         onChange={(e) => setSearchValue(e.target.value)}
       />
       {searchValue && (
         <svg
-          onClick={() => setSearchValue("")}
+          onClick={() => setSearchValue("")} //очистка поиска
           className={styles.closeIcon}
           xmlns="http://www.w3.org/2000/svg"
         >
