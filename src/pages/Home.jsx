@@ -7,14 +7,15 @@ import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
 import { useContext } from "react";
 import { SearchContext } from "../App";
+import { useSelector, useDispatch } from "react-redux";
+
+import setCategoryId from "../redux/slices/filterSlice";
 
 const Home = () => {
   const { searchValue } = useContext(SearchContext);
 
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [сategoryId, setCategoryId] = useState(0);
 
   const [activeSort, setActiveSort] = useState({
     name: "популярности",
@@ -23,9 +24,13 @@ const Home = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const category = сategoryId > 0 ? `category=${сategoryId}` : "";
+  const сategoryId = useSelector((state) => state.filterSlice.value);
+
+  const dispatch = useDispatch();
+
+  // const category = сategoryId > 0 ? `category=${сategoryId}` : "";
   const sortBy = activeSort.sortProperty;
-  const order = ""; // под вопросом
+  // const order = ""; // под вопросом
 
   const pizzas = items
     // .filter((obj) =>
@@ -50,22 +55,18 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, [сategoryId, activeSort, searchValue, currentPage]);
 
-  console.log(items.items);
-
   return (
     <>
       <div className="content">
         <div className="content__top">
           <Categories
             value={сategoryId}
-            onChangeCategory={(i) => setCategoryId(i)}
+            onChangeCategory={(i) => dispatch(setCategoryId)}
           />
           <Sort value={activeSort} onClickListItem={(i) => setActiveSort(i)} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
-        <div className="content__items">
-          {isLoading ? skeletons : pizzas}
-        </div>{" "}
+        <div className="content__items">{isLoading ? skeletons : pizzas}</div>
         <Pagination
           onChangePage={(currentPage) => setCurrentPage(currentPage)}
         />

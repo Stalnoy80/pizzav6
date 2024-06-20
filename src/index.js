@@ -6,7 +6,11 @@ import Cart from "./pages/Cart"; // Import the main component
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; // Import the router
 import NotFound from "./pages/NotFound";
 
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
+
 // Create a router object with a single route
+
 const router = createBrowserRouter([
   {
     path: "",
@@ -23,7 +27,9 @@ const router = createBrowserRouter([
 
 // Render the app to the root element with the router
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
