@@ -6,5 +6,3 @@ export const store = configureStore({
     filterSlice,
   },
 });
-
-console.log(store);

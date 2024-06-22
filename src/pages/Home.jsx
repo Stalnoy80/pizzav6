@@ -9,27 +9,26 @@ import { useContext } from "react";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 
-import setCategoryId from "../redux/slices/filterSlice";
+import { setCategoryId } from "../redux/slices/filterSlice";
 
 const Home = () => {
   const { searchValue } = useContext(SearchContext);
-
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [activeSort, setActiveSort] = useState({
-    name: "популярности",
-    sortProperty: "rating",
-  });
+  // const [activeSort, setActiveSort] = useState({
+  //   name: "популярности",
+  //   sortProperty: "rating",
+  // });
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const сategoryId = useSelector((state) => state.filterSlice.value);
-
   const dispatch = useDispatch();
 
+  const { сategoryId, sort } = useSelector((state) => state.filterSlice);
+
   // const category = сategoryId > 0 ? `category=${сategoryId}` : "";
-  const sortBy = activeSort.sortProperty;
+  const sortBy = sort.sortProperty;
   // const order = ""; // под вопросом
 
   const pizzas = items
@@ -53,7 +52,7 @@ const Home = () => {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [сategoryId, activeSort, searchValue, currentPage]);
+  }, [сategoryId, sort, searchValue, currentPage]);
 
   return (
     <>
@@ -61,9 +60,9 @@ const Home = () => {
         <div className="content__top">
           <Categories
             value={сategoryId}
-            onChangeCategory={(i) => dispatch(setCategoryId)}
+            onChangeCategory={(i) => dispatch(setCategoryId(i))}
           />
-          <Sort value={activeSort} onClickListItem={(i) => setActiveSort(i)} />
+          <Sort />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">{isLoading ? skeletons : pizzas}</div>
