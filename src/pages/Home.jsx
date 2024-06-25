@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from "react";
 
 import Categories from "../components/Categories";
-import Sort from "../components/Sort";
+import Sort, { list } from "../components/Sort";
 import Pizzablock from "../components/Pizzablock";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import qs from "qs";
 
-import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
+import {
+  setCategoryId,
+  setCurrentPage,
+  setFilters,
+} from "../redux/slices/filterSlice";
 
 const Home = () => {
   const { сategoryId, sort, currentPage } = useSelector(
     (state) => state.filterSlice
   );
-  console.log(currentPage);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +39,6 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  const dispatch = useDispatch();
-
   // const category = сategoryId > 0 ? `category=${сategoryId}` : "";
   const sortBy = sort.sortProperty;
   // const order = ""; // под вопросом
@@ -42,6 +49,13 @@ const Home = () => {
     // ) //фильтрация статика
     .map((obj, i) => <Pizzablock {...obj} key={i} />);
   const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i} />);
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      console.log(params);
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,6 +73,16 @@ const Home = () => {
       .catch((err) => err.message);
     window.scrollTo(0, 0);
   }, [сategoryId, sort, searchValue, currentPage]);
+
+  useEffect(() => {
+    const queryString = qs.stringify({
+      сategoryId,
+      sort,
+
+      currentPage,
+    });
+    navigate(`?${queryString}`);
+  }, [сategoryId, sort, , currentPage]);
 
   return (
     <>
