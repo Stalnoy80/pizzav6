@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Categories from "../components/Categories";
-import Sort, { list } from "../components/Sort";
+import Sort from "../components/Sort";
+
+import { list } from "../components/Sort";
 import Pizzablock from "../components/Pizzablock";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
@@ -25,10 +27,29 @@ const Home = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isSearch = useRef(false);
+  const isMounted = useRef(false);
 
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const fetchPizzas = () => {
+    setIsLoading(true);
+
+    axios
+      .get(
+        `https://813cecfc1deed960.mokky.dev/items?page=${currentPage}&limit=4&title=*${searchValue}&${
+          сategoryId > 0 ? `category=${сategoryId}` : ""
+        }&sortBy=${sortBy}`
+      )
+      .then((res) => {
+        setItems(res.data.items);
+        setIsLoading(false);
+      })
+      .catch((err) => err.message);
+    window.scrollTo(0, 0);
+  };
 
   // const [activeSort, setActiveSort] = useState({
   //   name: "популярности",
@@ -50,39 +71,42 @@ const Home = () => {
     .map((obj, i) => <Pizzablock {...obj} key={i} />);
   const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i} />);
 
+  //Если был первый рендер , то проверяем URL-параметры и сохраняем в редукс
+
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-      console.log(params);
+      const sortList = list.find(
+        (obj) => obj.sortProperty === params.sort.sortProperty
+      );
+
+      dispatch(setFilters({ ...params, sortList }));
+      isSearch.current = true;
     }
   }, []);
 
-  useEffect(() => {
-    setIsLoading(true);
+  // Если изменили параметры и уже был первый рендер,
 
-    axios
-      .get(
-        `https://813cecfc1deed960.mokky.dev/items?page=${currentPage}&limit=4&title=*${searchValue}&${
-          сategoryId > 0 ? `category=${сategoryId}` : ""
-        }&sortBy=${sortBy}`
-      )
-      .then((res) => {
-        setItems(res.data.items);
-        setIsLoading(false);
-      })
-      .catch((err) => err.message);
-    window.scrollTo(0, 0);
+  useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        сategoryId,
+        sort,
+        currentPage,
+      });
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true;
+  }, [сategoryId, sort, currentPage]);
+
+  // Если уже был первый рендер , запрашиваем пиццы
+
+  useEffect(() => {
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+    isSearch.current = false;
   }, [сategoryId, sort, searchValue, currentPage]);
-
-  useEffect(() => {
-    const queryString = qs.stringify({
-      сategoryId,
-      sort,
-
-      currentPage,
-    });
-    navigate(`?${queryString}`);
-  }, [сategoryId, sort, , currentPage]);
 
   return (
     <>

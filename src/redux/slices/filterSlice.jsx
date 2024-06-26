@@ -26,12 +26,11 @@ export const filterSlice = createSlice({
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
     },
-
-    // setFilters: (state, action) => {
-    //   state.sort = action.payload.sortBy;
-    //   state.searchValue = Number(action.payload.currentPage);
-    //   state.сategoryId = Number(action.payload.сategoryId);
-    // },
+    setFilters: (state, action) => {
+      state.sort = action.payload.sort;
+      state.currentPage = Number(action.payload.currentPage);
+      state.сategoryId = Number(action.payload.сategoryId);
+    },
   },
 });
 

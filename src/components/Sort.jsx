@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { setSort } from "../redux/slices/filterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -20,8 +20,20 @@ const Sort = () => {
 
   const sort = useSelector((state) => state.filterSlice.sort);
 
+  const sortWindow = useRef();
+
+  console.log(sortWindow);
+
+  useEffect(() => {
+    document.body.addEventListener("click", (event) => {
+      if (event.path.includes(sortWindow.current)) {
+        console.log("был клик на сорт");
+      }
+    });
+  }, []);
+
   return (
-    <div className="sort">
+    <div className="sort" ref={sortWindow}>
       <div className="sort__label">
         <svg
           width="10"
