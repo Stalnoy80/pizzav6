@@ -20,20 +20,24 @@ const Sort = () => {
 
   const sort = useSelector((state) => state.filterSlice.sort);
 
-  const sortWindow = useRef();
-
-  console.log(sortWindow);
+  const sortRef = useRef();
 
   useEffect(() => {
-    document.body.addEventListener("click", (event) => {
-      if (event.path.includes(sortWindow.current)) {
-        console.log("был клик на сорт");
+    const handleClickOutside = (event) => {
+      if (!event.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+        console.log("ouside");
       }
-    });
+    };
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
   return (
-    <div className="sort" ref={sortWindow}>
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
