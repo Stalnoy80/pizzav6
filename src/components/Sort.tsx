@@ -13,7 +13,7 @@ export const list = [
   { name: "алфавиту-", sortProperty: "-title" },
 ];
 
-const Sort = () => {
+const Sort: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();

@@ -3,9 +3,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
+import React from "react";
 
-const FullPizza = () => {
-  const [pizza, setPizza] = useState();
+const FullPizza: React.FC = () => {
+  const [pizza, setPizza] = useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -25,7 +30,7 @@ const FullPizza = () => {
   }, []);
 
   if (!pizza) {
-    return <div className="content">"Загрузка...";</div>;
+    return "Загрузка...";
   }
 
   return (
@@ -41,5 +46,4 @@ const FullPizza = () => {
     </div>
   );
 };
-
 export default FullPizza;

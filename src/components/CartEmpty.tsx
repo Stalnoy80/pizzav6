@@ -2,7 +2,7 @@ import React from "react";
 import emptyCart from "../assets/img/empty-cart.png";
 import { Link } from "react-router-dom";
 import Header from "./Header";
-const CartEmpty = () => {
+const CartEmpty: React.FC = () => {
   return (
     <div className="wrapper">
       <Header />
