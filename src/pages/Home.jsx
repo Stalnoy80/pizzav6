@@ -7,7 +7,7 @@ import { list } from "../components/Sort";
 import Pizzablock from "../components/Pizzablock";
 import Skeleton from "../components/Skeleton";
 import Pagination from "../components/Pagination";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import qs from "qs";
 
@@ -30,6 +30,9 @@ const Home = () => {
   const { сategoryId, sort, currentPage, searchValue } =
     useSelector(filterSelector);
 
+  const searchParams = useSearchParams();
+
+  console.log(searchParams);
   const getPizzas = async () => {
     dispatch(
       fetchPizzas({
@@ -59,7 +62,11 @@ const Home = () => {
     // .filter((obj) =>
     //   obj.title.toLowerCase().includes(searchValue.toLowerCase())
     // ) //фильтрация статика
-    .map((obj, i) => <Pizzablock {...obj} key={i} />);
+    .map((obj, i) => (
+      <Link key={i} to={`/pizza/${obj.id}`}>
+        <Pizzablock {...obj} />
+      </Link>
+    ));
   const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i} />);
 
   //Если был первый рендер , то проверяем URL-параметры и сохраняем в редукс
@@ -110,7 +117,7 @@ const Home = () => {
         <h2 className="content__title">Все пиццы</h2>
         {status === "error" ? (
           <div>
-            <div class="content__error-info">
+            <div className="content__error-info">
               <h2>
                 Произошла ошибка! <span>😕</span>
               </h2>
@@ -120,7 +127,7 @@ const Home = () => {
                 Не удалось получить питцы.
               </p>
 
-              <a class="button button--black" href="/">
+              <a className="button button--black" href="/">
                 <span>Вернуться назад</span>
               </a>
             </div>

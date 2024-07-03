@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import FullPizza from "./pages/FullPizza";
 
 // Create a router object with a single route
 
@@ -21,6 +22,12 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+    errorElement: <NotFound />,
+  },
+
+  {
+    path: "/pizza/:id",
+    element: <FullPizza />,
     errorElement: <NotFound />,
   },
 ]);
