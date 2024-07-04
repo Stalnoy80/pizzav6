@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-import Categories from "../components/Categories";
-import Sort from "../components/Sort";
+import Categories from "../components/Categories.tsx";
+import Sort from "../components/Sort.tsx";
 
-import { list } from "../components/Sort";
-import Pizzablock from "../components/Pizzablock";
-import Skeleton from "../components/Skeleton";
-import Pagination from "../components/Pagination";
+import { list } from "../components/Sort.tsx";
+import Skeleton from "../components/Skeleton.tsx";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import qs from "qs";
@@ -18,8 +16,10 @@ import {
   setFilters,
 } from "../redux/slices/filterSlice";
 import { fetchPizzas, pizzaSelector } from "../redux/slices/pizzasSlice";
+import Pagination from "../components/Pagination/index.tsx";
+import Pizzablock from "../components/Pizzablock.tsx";
 
-const Home = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = useRef(false);
@@ -35,6 +35,7 @@ const Home = () => {
   console.log(searchParams);
   const getPizzas = async () => {
     dispatch(
+      //@ts-ignore
       fetchPizzas({
         сategoryId,
         sortBy,
@@ -50,8 +51,8 @@ const Home = () => {
   //   sortProperty: "rating",
   // });
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onChangePage = (index: number) => {
+    dispatch(setCurrentPage(index));
   };
 
   // const category = сategoryId > 0 ? `category=${сategoryId}` : "";
@@ -62,7 +63,7 @@ const Home = () => {
     // .filter((obj) =>
     //   obj.title.toLowerCase().includes(searchValue.toLowerCase())
     // ) //фильтрация статика
-    .map((obj, i) => (
+    .map((obj: any, i: number) => (
       <Link key={i} to={`/pizza/${obj.id}`}>
         <Pizzablock {...obj} />
       </Link>
@@ -74,13 +75,12 @@ const Home = () => {
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-      const sortList = list.find(
-        (obj) => obj.sortProperty === params.sort.sortProperty
-      );
+      const sortList = list.find((obj) => obj.sortProperty === params.sortBy);
 
       dispatch(setFilters({ ...params, sortList }));
       isSearch.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Если изменили параметры и уже был первый рендер,
@@ -96,12 +96,14 @@ const Home = () => {
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [сategoryId, sort, currentPage]);
 
   // Если уже был первый рендер , запрашиваем пиццы
 
   useEffect(() => {
     getPizzas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [сategoryId, sort, currentPage, searchValue]);
 
   return (
@@ -110,7 +112,7 @@ const Home = () => {
         <div className="content__top">
           <Categories
             value={сategoryId}
-            onChangeCategory={(i) => dispatch(setCategoryId(i))}
+            onChangeCategory={(i: number) => dispatch(setCategoryId(i))}
           />
           <Sort />
         </div>

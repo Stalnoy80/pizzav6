@@ -1,7 +1,7 @@
 import React from "react";
 import "./scss/app.scss";
-import Header from "./components/Header";
-import Home from "./pages/Home";
+import Header from "./components/Header.tsx";
+import Home from "./pages/Home.tsx";
 
 const App: React.FC = () => {
   return (

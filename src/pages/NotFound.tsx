@@ -1,8 +1,8 @@
 import React from "react";
-import NotFoundBlock from "../components/NotFoundBlock";
-import Header from "../components/Header";
+import Header from "../components/Header.tsx";
+import NotFoundBlock from "../components/NotFoundBlock/index.tsx";
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   return (
     <div className="wrapper">
       <Header />

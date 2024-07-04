@@ -7,14 +7,15 @@ const Search = () => {
   const dispatch = useDispatch();
 
   const [value, setValue] = useState("");
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateSearchValue = useCallback(
-    debounce((str) => dispatch(setSearchValue(str)), 200),
+    debounce((str: string) => dispatch(setSearchValue(str)), 200),
     []
   );
 
-  const onChangeInput = (e) => {
+  const onChangeInput = (e: any) => {
     setValue(e.target.value);
     updateSearchValue(e.target.value);
   };
@@ -72,7 +73,10 @@ const Search = () => {
           onClick={() => {
             dispatch(setSearchValue(""));
             setValue("");
-            inputRef.current.focus();
+
+            if (inputRef.current) {
+              inputRef.current.focus();
+            }
           }} //очистка поиска
           className={styles.closeIcon}
           xmlns="http://www.w3.org/2000/svg"

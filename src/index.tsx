@@ -2,9 +2,9 @@ import React from "react";
 import * as ReactDOM from "react-dom/client";
 import "./scss/app.scss"; // Import the main stylesheet
 import App from "./App.tsx"; // Import the main component
-import Cart from "./pages/Cart"; // Import the main component
+import Cart from "./pages/Cart.tsx"; // Import the main component
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; // Import the router
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound.tsx";
 
 import { store } from "./redux/store";
 import { Provider } from "react-redux";

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Header from "../components/Header";
+import Header from "../components/Header.tsx";
 import React from "react";
 
 const FullPizza: React.FC = () => {
