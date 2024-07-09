@@ -6,7 +6,7 @@ import Sort from "../components/Sort.tsx";
 import { list } from "../components/Sort.tsx";
 import Skeleton from "../components/Skeleton.tsx";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import qs from "qs";
 
 import {
@@ -14,14 +14,19 @@ import {
   setCategoryId,
   setCurrentPage,
   setFilters,
-} from "../redux/slices/filterSlice";
-import { fetchPizzas, pizzaSelector } from "../redux/slices/pizzasSlice";
+} from "../redux/slices/filterSlice.tsx";
+import {
+  SearchPizzaParams,
+  fetchPizzas,
+  pizzaSelector,
+} from "../redux/slices/pizzasSlice.tsx";
 import Pagination from "../components/Pagination/index.tsx";
 import Pizzablock from "../components/Pizzablock.tsx";
+import { useAppDispatch } from "../redux/store.tsx";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
@@ -32,10 +37,8 @@ const Home: React.FC = () => {
 
   const searchParams = useSearchParams();
 
-  console.log(searchParams);
   const getPizzas = async () => {
     dispatch(
-      //@ts-ignore
       fetchPizzas({
         сategoryId,
         sortBy,
@@ -63,25 +66,23 @@ const Home: React.FC = () => {
     // .filter((obj) =>
     //   obj.title.toLowerCase().includes(searchValue.toLowerCase())
     // ) //фильтрация статика
-    .map((obj: any, i: number) => (
-      <Link key={i} to={`/pizza/${obj.id}`}>
-        <Pizzablock {...obj} />
-      </Link>
-    ));
+    .map((obj: any, i: number) => <Pizzablock {...obj} key={i} />);
   const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i} />);
 
   //Если был первый рендер , то проверяем URL-параметры и сохраняем в редукс
 
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sortList = list.find((obj) => obj.sortProperty === params.sortBy);
+  // useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(
+  //       window.location.search.substring(1)
+  //     ) as unknown as SearchPizzaParams;
+  //     const sortList = list.find((obj) => obj.sortProperty === params.sortBy);
 
-      dispatch(setFilters({ ...params, sortList }));
-      isSearch.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //     dispatch(setFilters({ ...params, sortList }));
+  //     isSearch.current = true;
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // Если изменили параметры и уже был первый рендер,
 

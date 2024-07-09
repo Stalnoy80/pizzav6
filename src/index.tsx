@@ -6,7 +6,7 @@ import Cart from "./pages/Cart.tsx"; // Import the main component
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; // Import the router
 import NotFound from "./pages/NotFound.tsx";
 
-import { store } from "./redux/store";
+import { store } from "./redux/store.tsx";
 import { Provider } from "react-redux";
 import FullPizza from "./pages/FullPizza.tsx";
 

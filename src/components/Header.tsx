@@ -2,7 +2,7 @@ import React from "react";
 import pizzaLogo from "../assets/img/pizza-logo.svg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { cartSelector } from "../redux/slices/cartSlice";
+import { cartSelector } from "../redux/slices/cartSlice.tsx";
 import { useLocation } from "react-router-dom";
 import Search from "./Search/index.tsx";
 const Header: React.FC = () => {

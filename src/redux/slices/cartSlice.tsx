@@ -1,6 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
-const initialState = {
+export type CartItem = {
+  id: number;
+  title: string;
+  price: number;
+  type: string;
+  size: number;
+  imageUrl: string;
+  count: number;
+  item: [];
+};
+
+interface CartSliceState {
+  totalPrice: number;
+  items: CartItem[];
+}
+
+const initialState: CartSliceState = {
   totalPrice: 0,
   items: [],
 };
@@ -9,7 +26,7 @@ export const cartSlice = createSlice({
   name: "cartSlice",
   initialState,
   reducers: {
-    addItems: (state, action) => {
+    addItems: (state, action: PayloadAction<CartItem>) => {
       const findItems = state.items.find((obj) => obj.id === action.payload.id);
 
       if (findItems) {
@@ -23,13 +40,13 @@ export const cartSlice = createSlice({
       );
     },
 
-    minusItem(state, action) {
+    minusItem(state, action: PayloadAction<number>) {
       const findItems = state.items.find((obj) => obj.id === action.payload);
       if (findItems) {
         findItems.count--;
       }
     },
-    removeItem: (state, action) => {
+    removeItem: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((obj) => obj.id !== action.payload);
     },
 
@@ -37,17 +54,17 @@ export const cartSlice = createSlice({
       state.items = [];
       state.totalPrice = 0;
     },
-    setFilters: (state, action) => {
-      state.sort = action.payload.sort;
-      state.currentPage = Number(action.payload.currentPage);
-      state.сategoryId = Number(action.payload.сategoryId);
-    },
+    // setFilters: (state, action) => {
+    //   state.sort = action.payload.sort;
+    //   state.currentPage = Number(action.payload.currentPage);
+    //   state.сategoryId = Number(action.payload.сategoryId);
+    // },
   },
 });
 
-export const cartSelector = (state) => state.cartSlice;
+export const cartSelector = (state: RootState) => state.cartSlice;
 
-export const cartItemSelectorById = (id) => (state) =>
+export const cartItemSelectorById = (id: number) => (state: RootState) =>
   state.cartSlice.items.find((obj) => obj.id === id);
 
 // Action creators are generated for each case reducer function

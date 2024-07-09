@@ -3,7 +3,7 @@ import Header from "../components/Header.tsx";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../components/CartItem.tsx";
-import { cartSelector, clearItems } from "../redux/slices/cartSlice.jsx";
+import { cartSelector, clearItems } from "../redux/slices/cartSlice.tsx";
 import CartEmpty from "../components/CartEmpty.tsx";
 
 const Cart: React.FC = () => {
@@ -19,8 +19,6 @@ const Cart: React.FC = () => {
       dispatch(clearItems());
     }
   };
-
-  console.log(totalPrice);
 
   if (!totalPrice) {
     return <CartEmpty />;
