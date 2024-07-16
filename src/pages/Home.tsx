@@ -1,41 +1,40 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import Categories from "../components/Categories.tsx";
 import Sort from "../components/Sort.tsx";
 
-import { list } from "../components/Sort.tsx";
 import Skeleton from "../components/Skeleton.tsx";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import qs from "qs";
 
-import {
-  filterSelector,
-  setCategoryId,
-  setCurrentPage,
-  setFilters,
-} from "../redux/slices/filterSlice.tsx";
-import {
-  SearchPizzaParams,
-  fetchPizzas,
-  pizzaSelector,
-} from "../redux/slices/pizzasSlice.tsx";
 import Pagination from "../components/Pagination/index.tsx";
 import Pizzablock from "../components/Pizzablock.tsx";
 import { useAppDispatch } from "../redux/store.tsx";
+import { filterSelector } from "../redux/Filter/selectors.ts";
+
+import { fetchPizzas } from "../redux/Pizza/slice.ts";
+
+import { setCategoryId, setCurrentPage } from "../redux/Filter/slice.ts";
+import { Pizza, Status } from "../redux/Pizza/types.ts";
+import { pizzaSelector } from "../redux/Pizza/selectors.ts";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isSearch = useRef(false);
+  // const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const { items, status } = useSelector(pizzaSelector);
+  type pizzaSelectorprops = {
+    items: Pizza[];
+    status: Status;
+  };
 
   const { сategoryId, sort, currentPage, searchValue } =
     useSelector(filterSelector);
+  const { items, status } = useSelector(pizzaSelector);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   const getPizzas = async () => {
     dispatch(
@@ -53,6 +52,10 @@ const Home: React.FC = () => {
   //   name: "популярности",
   //   sortProperty: "rating",
   // });
+  const onChangeCategory = useCallback(
+    (i: number) => dispatch(setCategoryId(i)),
+    []
+  );
 
   const onChangePage = (index: number) => {
     dispatch(setCurrentPage(index));
@@ -111,11 +114,8 @@ const Home: React.FC = () => {
     <>
       <div className="content">
         <div className="content__top">
-          <Categories
-            value={сategoryId}
-            onChangeCategory={(i: number) => dispatch(setCategoryId(i))}
-          />
-          <Sort />
+          <Categories value={сategoryId} onChangeCategory={onChangeCategory} />
+          <Sort sort={sort} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         {status === "error" ? (

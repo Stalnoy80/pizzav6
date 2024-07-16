@@ -1,25 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { getCartFromLS } from "../../utils/getCartFromLS.ts";
+import { calcTotalPrice } from "../../utils/calcTotalPrice.ts";
+import { CartItem, CartSliceState } from "./types.ts";
 
-export type CartItem = {
-  id: number;
-  title: string;
-  price: number;
-  type: string;
-  size: number;
-  imageUrl: string;
-  count: number;
-  item: [];
-};
-
-interface CartSliceState {
-  totalPrice: number;
-  items: CartItem[];
-}
+const { items, totalPrice } = getCartFromLS();
 
 const initialState: CartSliceState = {
-  totalPrice: 0,
-  items: [],
+  totalPrice,
+  items,
 };
 
 export const cartSlice = createSlice({
@@ -34,10 +22,7 @@ export const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, count: 1 });
       }
-      state.totalPrice = state.items.reduce(
-        (sum, res) => res.price * res.count + sum,
-        0
-      );
+      state.totalPrice = calcTotalPrice(state.items);
     },
 
     minusItem(state, action: PayloadAction<number>) {
@@ -61,11 +46,6 @@ export const cartSlice = createSlice({
     // },
   },
 });
-
-export const cartSelector = (state: RootState) => state.cartSlice;
-
-export const cartItemSelectorById = (id: number) => (state: RootState) =>
-  state.cartSlice.items.find((obj) => obj.id === id);
 
 // Action creators are generated for each case reducer function
 export const { addItems, removeItem, clearItems, minusItem } =

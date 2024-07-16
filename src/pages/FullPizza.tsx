@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header.tsx";
 import React from "react";
@@ -41,7 +41,12 @@ const FullPizza: React.FC = () => {
           <img src={pizza.imageUrl} height={400} />
           <h2>{pizza.title}</h2>
           <h3>{pizza.price} р</h3>
-        </div>
+          <Link to="/">
+            <div className="button pay-btn">
+              <span>Назад</span>
+            </div>
+          </Link>
+        </div>{" "}
       </div>
     </div>
   );
